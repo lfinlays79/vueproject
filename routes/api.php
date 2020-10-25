@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\MedicineController;
 
+use App\Mail\NewMail;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,3 +23,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('medicine', MedicineController::class);
+
+Route::get('\sendmail', function() {
+
+    Mail::to('newuser@example.com')->send(new NewMail());
+
+});

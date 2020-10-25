@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Medicine;
 use Log;
+use App\Events\GoneToIndex;
 
 class MedicineController extends Controller
 {
@@ -14,10 +15,25 @@ class MedicineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         Log::info('hello');
         $medicines = Medicine::all();
+        
+        $path = $request->path();
+        Log::info($path);
+
+        $all = $request->all();
+        Log::info($all);
+
+        $query = $request->query('dosage');
+        Log::info($query);
+
+        $dosagetwo = Medicine::where ('dosage', '=', $query )->get();
+        Log::info($dosagetwo);
+
+        
+
         return $medicines;
     }
 
@@ -29,7 +45,8 @@ class MedicineController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Log::info('got to store');
+        Medicine::create($request->all());
     }
 
     /**
@@ -40,7 +57,8 @@ class MedicineController extends Controller
      */
     public function show($id)
     {
-        //
+        $medicines = Medicine::find($id);
+        return $medicines;
     }
 
     /**
@@ -52,7 +70,8 @@ class MedicineController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Log::info('got to update');
+        Medicine::find($id)->update($request->all());
     }
 
     /**
@@ -63,6 +82,7 @@ class MedicineController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Log::info('got to delete');
+        Medicine::find($id)->delete();
     }
 }
